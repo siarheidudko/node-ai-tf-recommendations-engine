@@ -1,0 +1,111 @@
+<html>
+  <head>
+    <head>
+      <title>The recommendation engine is based on AI TensorFlow</title>
+      <meta charset="UTF-8" />
+      <meta
+        name="description"
+        content="The recommendation engine is based on AI TensorFlow"
+      />
+      <meta name="author" content="Siarhei Dudko" />
+      <meta charset="UTF-8" />
+      <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <link
+        rel="stylesheet"
+        type="text/css"
+        href="//unpkg.com/swagger-ui-dist@3/swagger-ui.css"
+      />
+      <style>
+        body {
+          padding: 5em;
+        }
+        .topbar,
+        .swagger-ui section.models {
+          display: none;
+        }
+        h1 {
+          text-align: center;
+        }
+        li {
+          font-weight: bold;
+        }
+        th,
+        td {
+          border: 1px solid black;
+          padding: 1em;
+        }
+      </style>
+      <script src="//unpkg.com/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
+      <script src="//unpkg.com/swagger-ui-dist@3/swagger-ui-standalone-preset.js"></script>
+      <link
+        rel="stylesheet"
+        href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css"
+      />
+      <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+    </head>
+  </head>
+  <body>
+    <h1>The recommendation engine is based on AI TensorFlow</h1>
+
+    <div>
+      The container allows you to load an array of products that contains the
+      identifier and text characteristics of the product as an embed in the
+      Universal Sentence Encoder data model, and then use the search for these
+      products.
+    </div>
+
+    <div id="swagger-ui"></div>
+    <br />
+    <hr />
+    <br />
+    <h2>Setup</h2>
+    <p>Run <code class="shell">docker compose build && docker compose up</code>, when you has been added <code>docker-compose.yml</code> file:</pre>
+    <pre><code class="yaml">
+version: "3.9"
+services:
+  webservice:
+    image: sergdudko/node-ai-tf-recommendations-engine
+    container_name: "node-ai-tf-recommendations-engine"
+    environment:
+      CLIENT_TOKEN: 8f702bc6-2374-4104-b743-7170b27e5443
+      SERVER_TOKEN: ba73e957-caf4-497c-812a-261fe02e3c48
+    ports:
+      - "8013:8013"
+    stdin_open: true
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    volumes:
+      - matrix_tensor_storage:/app/tmp
+volumes:
+  matrix_tensor_storage:
+</code></pre>
+
+<br />
+<p><b>ATTENTION: Due to a memory leak, the service will be stopped after configuring the embeddings, and it will automatically restart using Docker if configured correctly.</b></p>
+    <script>
+      window.onload = () => {
+        const swaggerInstance = SwaggerUIBundle({
+          dom_id: "#swagger-ui",
+          deepLinking: true,
+          presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+          plugins: [SwaggerUIBundle.plugins.DownloadUrl],
+          layout: "StandaloneLayout",
+          validatorUrl: "https://validator.swagger.io/validator",
+          url: "openapi.yaml",
+          persistAuthorization: true,
+        });
+        window.ui = swaggerInstance;
+      };
+    </script>
+    <script>
+      hljs.initHighlightingOnLoad();
+    </script>
+  </body>
+</html>

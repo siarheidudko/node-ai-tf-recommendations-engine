@@ -1,0 +1,124 @@
+openapi: 3.0.0
+info:
+  title: node-ai-tf-recommendations-engine
+  description: The recommendation engine is based on AI TensorFlow
+  contact:
+    email: sergey@dudko.dev
+  version: 0.0.1
+servers:
+  - url: http://localhost:8013
+tags:
+  - name: admin
+    description: Admin API
+  - name: client
+    description: Client API
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+  schemas:
+    Products:
+      type: array
+      items:
+        $ref: "#/components/schemas/Product"
+    Product:
+      type: object
+      required:
+        - id
+        - description
+      properties:
+        id:
+          type: string
+          description: ID of the Product
+          example: "1"
+        description:
+          type: string
+          description: Description of the Product (will be used for the search)
+          example: A light white wine for hot weather
+    SearchProducts:
+      type: object
+      required:
+        - input
+      properties:
+        input:
+          type: string
+          description: The string to be used for the search
+          example: Something semi-dry with a berry flavor.
+        top:
+          type: integer
+          description: The maximum number of returned products.
+          example: 3
+    BaseResponse:
+      type: object
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+          description: The result of the operation
+          example: true
+        data:
+          type: object
+    ProductsResponse:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          description: The result of the operation
+          example: true
+        data:
+          $ref: "#/components/schemas/Products"
+security:
+  - ApiKeyAuth: []
+paths:
+  /a/p:
+    put:
+      tags:
+        - admin
+      summary: Update embeddings in the model
+      description: Embed a list of products and their characteristics in the model
+      operationId: adminProductsPut
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        description: List of products
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Products"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseResponse"
+  /u/p:
+    post:
+      tags:
+        - client
+      summary: Get the list of products
+      description: Get the list of products that most likely matches the search query
+      operationId: clientProductsPost
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        description: The search query
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SearchProducts"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProductsResponse"

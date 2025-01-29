@@ -1,0 +1,48 @@
+name: Build webservice image and push to dockerhub.
+on:
+  push:
+    tags:
+      - "*.*.*"
+jobs:
+  deploy:
+    name: Build image and push to dockerhub.
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      DOCKER_USER: ${{ secrets.DOCKER_USER }}
+      DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+      DOCKER_REPO: "sergdudko/node-ai-tf-recommendations-engine"
+    steps:
+      - name: Сheckout repo (${{ github.repository }})
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.ref }}
+      - name: Set RELEASE_VERSION env
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.DOCKER_USER }}
+          password: ${{ env.DOCKER_TOKEN }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.DOCKER_REPO }}
+      - name: Build and push Docker image (Beta Release)
+        if: ${{ endsWith(env.RELEASE_VERSION, '-beta') }}
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ env.DOCKER_REPO }}:${{ env.RELEASE_VERSION }}
+          labels: ${{ steps.meta.outputs.labels }}
+      - name: Build and push Docker image (Release)
+        if: ${{ !endsWith(env.RELEASE_VERSION, '-beta') }}
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ env.DOCKER_REPO }}:latest, ${{ env.DOCKER_REPO }}:${{ env.RELEASE_VERSION }}
+          labels: ${{ steps.meta.outputs.labels }}

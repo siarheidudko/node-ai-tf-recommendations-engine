@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  webservice:
+    image: node-ai-tf-recommendations-engine
+    container_name: "node-ai-tf-recommendations-engine"
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: build
+    environment:
+      NODE_ENV: production
+      CLIENT_TOKEN: 00000000-0000-0000-0000-000000000000
+      SERVER_TOKEN: 00000000-0000-0000-0000-000000000000
+      PORT: 8013
+    ports:
+      - "8013:8013"
+    stdin_open: true
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    volumes:
+      - matrix_tensor_storage:/app/tmp
+volumes:
+  matrix_tensor_storage:
