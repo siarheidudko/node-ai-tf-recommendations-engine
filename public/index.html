@@ -89,6 +89,7 @@ volumes:
 <br />
 <p>Or run commands:</p>
 <pre><code class="shell">
+docker image pull sergdudko/node-ai-tf-recommendations-engine:latest && \
 docker volume create matrix_tensor_storage && \
 docker run -d \
   --name node-ai-tf-recommendations-engine \
@@ -101,7 +102,7 @@ docker run -d \
   --log-driver json-file \
   --log-opt max-size=10m \
   --log-opt max-file=3 \
-  sergdudko/node-ai-tf-recommendations-engine
+  sergdudko/node-ai-tf-recommendations-engine:latest
 </code></pre>
 
 <br />

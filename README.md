@@ -8,7 +8,7 @@ Run `docker compose up -d --force-recreate`, when you has been added `docker-com
 name: tensorflow
 services:
   webservice:
-    image: sergdudko/node-ai-tf-recommendations-engine
+    image: sergdudko/node-ai-tf-recommendations-engine:latest
     container_name: "node-ai-tf-recommendations-engine"
     environment:
       CLIENT_TOKEN: 00000000-0000-0000-0000-000000000000
@@ -33,6 +33,7 @@ volumes:
 Or just run commands:
 
 ```sh
+docker image pull sergdudko/node-ai-tf-recommendations-engine:latest && \
 docker volume create matrix_tensor_storage && \
 docker run -d \
   --name node-ai-tf-recommendations-engine \
@@ -45,7 +46,7 @@ docker run -d \
   --log-driver json-file \
   --log-opt max-size=10m \
   --log-opt max-file=3 \
-  sergdudko/node-ai-tf-recommendations-engine
+  sergdudko/node-ai-tf-recommendations-engine:latest
 ```
 
 For more information, see Swagger UI [http://localhost:8013](http://localhost:8013)
