@@ -27,7 +27,9 @@ server.use((req, res) => {
   res.status(404).json({ success: false, error: `Not Found` });
 });
 
-server.listen(process.env.PORT, (err) => {
+const port = process.env.PORT ?? "8013";
+
+server.listen(port, (err) => {
   if (err) throw err;
-  logger.log(`The server is running on port ${process.env.PORT}.`);
+  logger.log(`The server is running on port ${port}.`);
 });

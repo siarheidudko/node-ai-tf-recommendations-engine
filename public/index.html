@@ -60,16 +60,16 @@
     <hr />
     <br />
     <h2>Setup</h2>
-    <p>Run <code class="shell">docker compose build && docker compose up</code>, when you has been added <code>docker-compose.yml</code> file:</pre>
+    <p>Run <code class="shell">docker compose up -d --force-recreate</code>, when you has been added <code>docker-compose.yml</code> file:</pre>
     <pre><code class="yaml">
-version: "3.9"
+name: tensorflow
 services:
   webservice:
     image: sergdudko/node-ai-tf-recommendations-engine
     container_name: "node-ai-tf-recommendations-engine"
     environment:
-      CLIENT_TOKEN: 8f702bc6-2374-4104-b743-7170b27e5443
-      SERVER_TOKEN: ba73e957-caf4-497c-812a-261fe02e3c48
+      CLIENT_TOKEN: 00000000-0000-0000-0000-000000000000
+      SERVER_TOKEN: 00000000-0000-0000-0000-000000000000
     ports:
       - "8013:8013"
     stdin_open: true
@@ -85,6 +85,23 @@ services:
       - matrix_tensor_storage:/app/tmp
 volumes:
   matrix_tensor_storage:
+</code></pre>
+<br />
+<p>Or run commands:</p>
+<pre><code class="shell">
+docker volume create matrix_tensor_storage && \
+docker run -d \
+  --name node-ai-tf-recommendations-engine \
+  --restart unless-stopped \
+  --security-opt no-new-privileges:true \
+  --env CLIENT_TOKEN=00000000-0000-0000-0000-000000000000 \
+  --env SERVER_TOKEN=00000000-0000-0000-0000-000000000000 \
+  --publish 8013:8013 \
+  --volume matrix_tensor_storage:/app/tmp \
+  --log-driver json-file \
+  --log-opt max-size=10m \
+  --log-opt max-file=3 \
+  sergdudko/node-ai-tf-recommendations-engine
 </code></pre>
 
 <br />
