@@ -1,6 +1,6 @@
 {
   "name": "node-ai-tf-recomendations-engine",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "The recommendation engine is based on AI TensorFlow",
   "main": "./src/server.ts",
   "type": "module",
